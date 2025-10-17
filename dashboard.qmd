@@ -48,9 +48,20 @@ stacked_player_scores_R <- lapply(
         .default = FALSE
         )
     ) |>
-    ungroup()
+    ungroup() |>
+    arrange(
+        game
+    )
 
-rows <- lapply(seq_len(nrow(stacked_player_scores_R)), function(i) as.list(stacked_player_scores_R[i, ]))
+rows <- lapply(
+    seq_len(
+        nrow(stacked_player_scores_R)
+    ),
+    function(i) as.list(
+        stacked_player_scores_R[i, ]
+    )
+)
+
 ojs_define(data = rows)
 ```
 
@@ -79,13 +90,40 @@ viewof name = Inputs.select(
 ```{ojs}
 //| output: false
 
-filtered = data.filter(function(penguin) {
-  return name == penguin.Name;
+filtered_total = data.filter(function(df) {
+  return df.Name == name && df.score_type == "total_score";
+})
+
+filtered_non_total = data.filter(function(df) {
+  return df.Name == name && df.score_type != "total_score";
 })
 ```
 
-# Data
+## Plot
 
 ```{ojs}
-Inputs.table(filtered)
+Plot.plot(
+    {
+        marks: [
+            Plot.line(
+                filtered_total, 
+                {
+                    x: "game",
+                    y: "score"
+                }, 
+                {
+                    stroke: "black"
+                }
+            )
+        ]
+    }
+)
+```
+
+## Data
+
+```{ojs}
+Inputs.table(
+    filtered_total
+)
 ```
