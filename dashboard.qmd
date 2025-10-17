@@ -51,6 +51,8 @@ stacked_player_scores <- lapply(
     ungroup()
 ```
 
+Last updated: `{r} now()`
+
 ## Row {.tabset}
 
 ### Alex
