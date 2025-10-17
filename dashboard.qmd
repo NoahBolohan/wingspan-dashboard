@@ -1,0 +1,536 @@
+---
+title: "Wingspan Data"
+author: "Noah Bolohan"
+format: dashboard
+---
+
+```{r "imports"}
+library(tidyverse)
+library(gt)
+
+invisible(
+    lapply(
+        list.files(
+            "./R",
+            full.names = TRUE
+        ),
+        source
+    )
+)
+```
+
+```{r "Download Google Sheet"}
+wingspan_scores <- get_google_sheet(
+  sheetId = 2096833443
+)
+
+wingspan_scores <- wingspan_scores |>
+    mutate(
+        game = 1:nrow(
+            wingspan_scores
+        ),
+        .before = 1
+    )
+```
+
+```{r "Stacked player score"}
+stacked_player_scores <- lapply(
+        1:7,
+        iterative_pivot,
+        df = wingspan_scores
+    ) |> 
+    bind_rows() |>
+    drop_na() |>
+    group_by(game) |>
+    mutate(
+        winner = case_when(
+        score >= max(score, na.rm = TRUE) ~ TRUE,
+        .default = FALSE
+        )
+    ) |>
+    ungroup()
+```
+
+## Row {.tabset}
+
+### Alex
+
+:::::: {.rows}
+
+::::: {.card height="100%"}
+```{r "Alex table"}
+
+name <- "Alex"
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+summary_frame <- data.frame(
+    Measure = c(
+    "Games played",
+    "Games won",
+    "Win rate",
+    "Max score",
+    "Min score",
+    "Mean score"
+    ),
+    Value = c(
+        nrow(
+            player_scores_total
+        ),
+        sum(
+            player_scores_total["winner"]
+        ),
+        paste0(
+            round(
+                100 * sum(
+                    player_scores_total["winner"]
+                ) / nrow(
+                    player_scores_total
+                ),
+                2
+            ),
+            " %"
+        ),
+        max(
+            player_scores_total["score"]
+        ),
+        min(
+            player_scores_total["score"]
+        ),
+        paste(
+            round(
+                colMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            " (+/-",
+            round(
+                colSdColMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            ")",
+            sep=""
+        )
+    )
+)
+
+summary_frame |>
+    gt() |>
+    tab_header(
+    title = name
+    )
+
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Alex total score plot"}
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+ggplot(
+    player_scores_total,
+    aes(
+        # x = pull(player_scores_total["game"]),
+        x = as.integer(
+            rownames(player_scores_total)
+        ),
+        y = pull(
+            player_scores_total["score"]
+        )
+    )
+) +
+geom_line() +
+xlab("Game number") +
+ylab("Score")
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Alex score breakdown plot"}
+
+player_scores <- stacked_player_scores |> 
+    filter(
+        Name == name,
+        score_type != "total_score"
+    ) |>
+    mutate(
+        inc_game = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        )
+    )
+    
+ggplot(
+    player_scores,
+    aes(
+        # x = pull(player_scores["game"]),
+        x = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        ),
+        y = pull(
+            player_scores["score"]
+        ),
+        fill = pull(
+            player_scores["score_type"]
+        )
+    )   
+) + 
+geom_area() +
+xlab("Game number") +
+ylab("Score") +
+labs(fill="Score types")
+
+```
+
+:::::
+
+::::::
+
+
+### Mila
+
+:::::: {.rows}
+
+::::: {.card height="100%"}
+```{r "Mila table"}
+
+name <- "Mila"
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+summary_frame <- data.frame(
+    Measure = c(
+    "Games played",
+    "Games won",
+    "Win rate",
+    "Max score",
+    "Min score",
+    "Mean score"
+    ),
+    Value = c(
+        nrow(
+            player_scores_total
+        ),
+        sum(
+            player_scores_total["winner"]
+        ),
+        paste0(
+            round(
+                100 * sum(
+                    player_scores_total["winner"]
+                ) / nrow(
+                    player_scores_total
+                ),
+                2
+            ),
+            " %"
+        ),
+        max(
+            player_scores_total["score"]
+        ),
+        min(
+            player_scores_total["score"]
+        ),
+        paste(
+            round(
+                colMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            " (+/-",
+            round(
+                colSdColMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            ")",
+            sep=""
+        )
+    )
+)
+
+summary_frame |>
+    gt() |>
+    tab_header(
+    title = name
+    )
+
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Mila total score plot"}
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+ggplot(
+    player_scores_total,
+    aes(
+        # x = pull(player_scores_total["game"]),
+        x = as.integer(
+            rownames(player_scores_total)
+        ),
+        y = pull(
+            player_scores_total["score"]
+        )
+    )
+) +
+geom_line() +
+xlab("Game number") +
+ylab("Score")
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Mila score breakdown plot"}
+
+player_scores <- stacked_player_scores |> 
+    filter(
+        Name == name,
+        score_type != "total_score"
+    ) |>
+    mutate(
+        inc_game = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        )
+    )
+    
+ggplot(
+    player_scores,
+    aes(
+        # x = pull(player_scores["game"]),
+        x = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        ),
+        y = pull(
+            player_scores["score"]
+        ),
+        fill = pull(
+            player_scores["score_type"]
+        )
+    )   
+) + 
+geom_area() +
+xlab("Game number") +
+ylab("Score") +
+labs(fill="Score types")
+
+```
+
+:::::
+
+::::::
+
+
+### Noah
+
+:::::: {.rows}
+
+::::: {.card height="100%"}
+```{r "Noah table"}
+
+name <- "Noah"
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+summary_frame <- data.frame(
+    Measure = c(
+    "Games played",
+    "Games won",
+    "Win rate",
+    "Max score",
+    "Min score",
+    "Mean score"
+    ),
+    Value = c(
+        nrow(
+            player_scores_total
+        ),
+        sum(
+            player_scores_total["winner"]
+        ),
+        paste0(
+            round(
+                100 * sum(
+                    player_scores_total["winner"]
+                ) / nrow(
+                    player_scores_total
+                ),
+                2
+            ),
+            " %"
+        ),
+        max(
+            player_scores_total["score"]
+        ),
+        min(
+            player_scores_total["score"]
+        ),
+        paste(
+            round(
+                colMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            " (+/-",
+            round(
+                colSdColMeans(
+                    player_scores_total["score"]
+                ),
+                2
+            ),
+            ")",
+            sep=""
+        )
+    )
+)
+
+summary_frame |>
+    gt() |>
+    tab_header(
+    title = name
+    )
+
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Noah total score plot"}
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        Name == name,
+        score_type == "total_score"
+    ) |>
+    arrange(
+        game
+    )
+    
+ggplot(
+    player_scores_total,
+    aes(
+        # x = pull(player_scores_total["game"]),
+        x = as.integer(
+            rownames(player_scores_total)
+        ),
+        y = pull(
+            player_scores_total["score"]
+        )
+    )
+) +
+geom_line() +
+xlab("Game number") +
+ylab("Score")
+```
+
+:::::
+
+::::: {.card height="100%"}
+
+```{r "Noah score breakdown plot"}
+
+player_scores <- stacked_player_scores |> 
+    filter(
+        Name == name,
+        score_type != "total_score"
+    ) |>
+    mutate(
+        inc_game = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        )
+    )
+    
+ggplot(
+    player_scores,
+    aes(
+        # x = pull(player_scores["game"]),
+        x = as.numeric(
+            factor(
+                game,
+                levels = unique(game)
+            )
+        ),
+        y = pull(
+            player_scores["score"]
+        ),
+        fill = pull(
+            player_scores["score_type"]
+        )
+    )   
+) + 
+geom_area() +
+xlab("Game number") +
+ylab("Score") +
+labs(fill="Score types")
+
+```
+
+:::::
+
+::::::
