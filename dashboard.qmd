@@ -1,5 +1,5 @@
 ---
-title: "Wingspan Data"
+title: "Wingspan data_stacked"
 author: "Noah Bolohan"
 format: dashboard
 ---
@@ -53,7 +53,7 @@ stacked_player_scores_R <- lapply(
         game
     )
 
-rows <- lapply(
+rows_stacked <- lapply(
     seq_len(
         nrow(stacked_player_scores_R)
     ),
@@ -62,7 +62,17 @@ rows <- lapply(
     )
 )
 
-ojs_define(data = rows)
+rows_scores <- lapply(
+    seq_len(
+        nrow(wingspan_scores)
+    ),
+    function(i) as.list(
+        wingspan_scores[i, ]
+    )
+)
+
+ojs_define(data_stacked = rows_stacked)
+ojs_define(data_scores = rows_scores)
 ```
 
 
@@ -85,16 +95,28 @@ viewof name = Inputs.select(
         label: "Name"
     }
 )
+
+viewof n_games = Inputs.range(
+    [
+        1,
+        data_scores.length
+    ],
+    {
+        value: 50,
+        step: 1,
+        label: "Number of games"
+    }
+)
 ```
 
 ```{ojs}
 //| output: false
 
-filtered_total = data.filter(function(df) {
+filtered_total = data_stacked.filter(function(df) {
   return df.Name == name && df.score_type == "total_score";
 })
 
-filtered_non_total = data.filter(function(df) {
+filtered_non_total = data_stacked.filter(function(df) {
   return df.Name == name && df.score_type != "total_score";
 })
 ```
@@ -106,24 +128,9 @@ Plot.plot(
     {
         marks: [
             Plot.line(
-                filtered_total, 
-                {
-                    x: "game",
-                    y: "score"
-                }, 
-                {
-                    stroke: "black"
-                }
+                filtered_total.map((d,i) => [i,d.score])
             )
         ]
     }
-)
-```
-
-## Data
-
-```{ojs}
-Inputs.table(
-    filtered_total
 )
 ```
