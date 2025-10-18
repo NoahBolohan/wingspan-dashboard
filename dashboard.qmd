@@ -1,5 +1,5 @@
 ---
-title: "Wingspan data_stacked"
+title: "Wingspan data"
 author: "Noah Bolohan"
 format: dashboard
 ---
@@ -95,18 +95,6 @@ viewof name = Inputs.select(
         label: "Name"
     }
 )
-
-viewof n_games = Inputs.range(
-    [
-        1,
-        data_scores.length
-    ],
-    {
-        value: 50,
-        step: 1,
-        label: "Number of games"
-    }
-)
 ```
 
 ```{ojs}
@@ -119,6 +107,24 @@ filtered_total = data_stacked.filter(function(df) {
 filtered_non_total = data_stacked.filter(function(df) {
   return df.Name == name && df.score_type != "total_score";
 })
+
+filtered_scores = data_scores.filter(function(df) {
+  return df.player_1_name == name || df.player_2_name == name || df.player_3_name == name || df.player_4_name == name || df.player_5_name == name || df.player_6_name == name || df.player_7_name == name ;
+})
+```
+
+```{ojs}
+viewof n_games = Inputs.range(
+    [
+        1,
+        filtered_scores.length
+    ],
+    {
+        value: 50,
+        step: 1,
+        label: "Last N games"
+    }
+)
 ```
 
 ## Plot
@@ -128,7 +134,7 @@ Plot.plot(
     {
         marks: [
             Plot.line(
-                filtered_total.map((d,i) => [i,d.score])
+                filtered_total.slice(-n_games).map((d,i) => [i,d.score])
             )
         ]
     }
