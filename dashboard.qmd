@@ -243,6 +243,124 @@ pp <- p %>%
 pp
 ```
 
+```{r "Plot: Rolling win rate"}
+
+player_scores_total <- stacked_player_scores |>
+    filter(
+        score_type == "total_score"
+    ) |>
+    group_by(
+        Name
+    ) |>
+    mutate(
+        group_size = n()
+    ) |> 
+    filter(
+        group_size >= 10
+    ) |>
+    arrange(
+        game
+    ) |>
+    mutate(
+        game_number = row_number(),
+        wins_to_date = cumsum(
+            winner
+        )
+    ) %>%
+    split(
+        .,
+        .$Name
+    )
+
+p <- player_scores_total[[1]] %>%
+    plot_ly( 
+        x = ~game_number,
+        y = ~score,
+        type = "scatter",
+        mode = "lines",
+        visible = TRUE
+    )   
+
+for (name in names(player_scores_total)[-1]) {
+    if (name != "Alex") {
+        p <- p %>% add_lines(
+            data = player_scores_total[[name]],
+            x = ~game_number,
+            y = ~score,
+            visible = FALSE,
+            name = name
+        )
+    }
+}
+  
+pp <- p %>%
+  layout(
+    title = list(
+      text = "Total score per game",
+      x = 0,
+      xanchor = "left"
+    ),
+    xaxis = list(title = "Game number"),
+    yaxis = list(title = "Score"),
+    showlegend = FALSE,
+    margin = list(
+        l=0,
+        r=0
+    ),
+    updatemenus = list(
+        list(
+            y = 1.15,
+            yanchor="top",
+            x = 0.99,
+            xanchor = "right",
+            buttons = lapply(
+                names(player_scores_total),
+                function(name) {
+                    list(
+                        method="update", 
+                        args = list(
+                            list(
+                                visible = as.logical(
+                                    match(
+                                        names(
+                                            player_scores_total
+                                        ),
+                                        name,
+                                        nomatch=FALSE
+                                    )
+                                )
+                            ),
+                            list(
+                                yaxis = list(
+                                    title = "Score"
+                                ),
+                                title = "Total scores per game"
+                            ) 
+                        ),
+                        label = name
+                    )
+                }
+            )
+        )
+    )
+  ) |>
+  config(
+    modeBarButtonsToRemove = list(
+        "zoom2d",
+        "pan2d",
+        "toImage",
+        "zoomIn2d",
+        "zoomOut2d",
+        "autoScale2d",
+        "hoverCompareCartesian",
+        "hoverClosestCartesian"
+    ),
+    displayModeBar = FALSE
+  )
+
+pp
+```
+
 Some summary data for all recorded games of Wingspan in [my score sheet](https://docs.google.com/spreadsheets/d/1K600qeRyYevSrMBUyevP4sZ4vRIBzq4ggCl3cLjHAvc/edit?usp=sharing). Only players with >= 10 games recorded are included in these summaries.
 
 ```{r "Text: last update (data)"}
