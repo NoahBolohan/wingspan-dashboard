@@ -14,6 +14,7 @@ format:
 library(tidyverse)
 library(gt)
 library(plotly)
+library(slider)
 
 invisible(
     lapply(
@@ -186,7 +187,7 @@ pp <- p %>%
     yaxis = list(title = "Score"),
     showlegend = FALSE,
     margin = list(
-        l=0,
+        l=40,
         r=0
     ),
     updatemenus = list(
@@ -211,13 +212,7 @@ pp <- p %>%
                                         nomatch=FALSE
                                     )
                                 )
-                            ),
-                            list(
-                                yaxis = list(
-                                    title = "Score"
-                                ),
-                                title = "Total scores per game"
-                            ) 
+                            )
                         ),
                         label = name
                     )
@@ -263,8 +258,11 @@ player_scores_total <- stacked_player_scores |>
     ) |>
     mutate(
         game_number = row_number(),
-        wins_to_date = cumsum(
-            winner
+        rolling_wr = 100 * slide_dbl(
+            winner,
+            mean,
+            .before = 50,
+            .after = 0
         )
     ) %>%
     split(
@@ -275,7 +273,7 @@ player_scores_total <- stacked_player_scores |>
 p <- player_scores_total[[1]] %>%
     plot_ly( 
         x = ~game_number,
-        y = ~score,
+        y = ~rolling_wr,
         type = "scatter",
         mode = "lines",
         visible = TRUE
@@ -286,7 +284,7 @@ for (name in names(player_scores_total)[-1]) {
         p <- p %>% add_lines(
             data = player_scores_total[[name]],
             x = ~game_number,
-            y = ~score,
+            y = ~rolling_wr,
             visible = FALSE,
             name = name
         )
@@ -296,15 +294,15 @@ for (name in names(player_scores_total)[-1]) {
 pp <- p %>%
   layout(
     title = list(
-      text = "Total score per game",
+      text = "Rolling % (50 games)",
       x = 0,
       xanchor = "left"
     ),
     xaxis = list(title = "Game number"),
-    yaxis = list(title = "Score"),
+    yaxis = list(title = "Win rate (%)"),
     showlegend = FALSE,
     margin = list(
-        l=0,
+        l=40,
         r=0
     ),
     updatemenus = list(
@@ -329,13 +327,7 @@ pp <- p %>%
                                         nomatch=FALSE
                                     )
                                 )
-                            ),
-                            list(
-                                yaxis = list(
-                                    title = "Score"
-                                ),
-                                title = "Total scores per game"
-                            ) 
+                            )
                         ),
                         label = name
                     )
