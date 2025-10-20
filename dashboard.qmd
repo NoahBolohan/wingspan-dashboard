@@ -52,82 +52,66 @@ stacked_player_scores <- lapply(
     ungroup()
 ```
 
+# Data
+
 :::::: {.rows}
 
 ::::: {.card height="100%"}
 ```{r "Table: Summary"}
 
-name <- "Alex"
-
-player_scores_total <- stacked_player_scores |>
+stacked_player_scores |>
     filter(
-        Name == name,
         score_type == "total_score"
+    ) |>
+    group_by(
+        Name
+    ) |>
+    mutate(
+        group_size = n()
+    ) |> 
+    filter(
+        group_size >= 10
     ) |>
     arrange(
         game
-    )
-    
-summary_frame <- data.frame(
-    Measure = c(
-    "Games played",
-    "Games won",
-    "Win rate",
-    "Max score",
-    "Min score",
-    "Mean score"
-    ),
-    Value = c(
-        nrow(
-            player_scores_total
-        ),
-        sum(
-            player_scores_total["winner"]
-        ),
-        paste0(
-            round(
-                100 * sum(
-                    player_scores_total["winner"]
-                ) / nrow(
-                    player_scores_total
-                ),
-                2
-            ),
-            " %"
-        ),
-        max(
-            player_scores_total["score"]
-        ),
-        min(
-            player_scores_total["score"]
-        ),
-        paste(
-            round(
-                colMeans(
-                    player_scores_total["score"]
-                ),
-                2
-            ),
-            " (+/-",
-            round(
-                colSdColMeans(
-                    player_scores_total["score"]
-                ),
-                2
-            ),
-            ")",
-            sep=""
-        )
-    )
-)
-
-summary_frame |>
-    gt() |>
-    tab_header(
-        title = name
     ) |>
-    tab_options(
-        column_labels.hidden = TRUE
+    mutate(
+        "Played" = n(),
+        "Won" = sum(winner),
+        "%" = round(
+            100 * sum(
+                winner
+            ) / n(),
+            1
+        ),
+        "Max" = max(score),
+        "Min" = min(score),
+        "Mean" = round(
+            mean(score),
+            1
+        )
+    ) |>
+    select(
+        c(
+            Name,
+            "Played",
+            "Won",
+            "%",
+            "Max",
+            "Min",
+            "Mean"
+        )
+    ) |>
+    filter(
+        row_number() == 1
+    ) |>
+    gt(
+        groupname_col = NULL,
+        rowname_col = "Name"
+    ) |>
+    tab_header(
+        title = "Summary statistics",
+        subtitle = "Min. 10 games played"
     )
 
 ```
