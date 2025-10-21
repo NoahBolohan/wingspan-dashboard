@@ -59,6 +59,33 @@ stacked_player_scores <- lapply(
     ungroup()
 ```
 
+# Home
+
+Some summary data for all recorded games of Wingspan in [my score sheet](https://docs.google.com/spreadsheets/d/1K600qeRyYevSrMBUyevP4sZ4vRIBzq4ggCl3cLjHAvc/edit?usp=sharing). Only players with >= 10 games recorded are included in these summaries.
+
+
+[Data](#data)
+
+[Leaderboards](#leaderboard)\
+
+Tips:
+
+- Drag on plots to zoom in
+- Double-tap plots to reset
+- Dashboard data refreshes daily at 7am Eastern or when I make a change
+
+```{r "Text: last update (data)"}
+#| content: valuebox
+#| title: "Last updated"
+list(
+  icon = "clock-history",
+  value = format(
+    now(tzone="America/New_York"),
+    "%b. %d, '%y, %H:%M"
+  )
+)
+```
+
 # Data
 
 ```{r "Table: Summary"}
@@ -353,32 +380,6 @@ pp <- p %>%
 pp
 ```
 
-Some summary data for all recorded games of Wingspan in [my score sheet](https://docs.google.com/spreadsheets/d/1K600qeRyYevSrMBUyevP4sZ4vRIBzq4ggCl3cLjHAvc/edit?usp=sharing). Only players with >= 10 games recorded are included in these summaries.
-
-```{r "Text: last update (data)"}
-#| content: valuebox
-#| title: "Last updated"
-list(
-  icon = "clock-history",
-  value = format(
-    now(tzone="America/New_York"),
-    "%b. %d, '%y, %H:%M"
-  )
-)
-```
-
 # Leaderboard
 
 TBD
-
-```{r "Text: last update (leaderboard)"}
-#| content: valuebox
-#| title: "Last updated"
-list(
-  icon = "clock-history",
-  value = format(
-    now(tzone="America/New_York"),
-    "%b. %d, '%y, %H:%M"
-  )
-)
-```
