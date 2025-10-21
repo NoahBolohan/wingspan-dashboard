@@ -382,4 +382,75 @@ pp
 
 # Leaderboard
 
-TBD
+```{r "Compute leaderboard records"}
+
+leader_board_table <- data.frame(
+    Record=character(),
+    Holder=character(),
+    Value=integer(),
+    Date=character()
+)
+
+# Highest total score
+highest_total_score <- stacked_player_scores |>
+    filter(
+        score_type == "total_score",
+        winner
+    ) |>
+    arrange(
+        game
+    ) |>
+    select(
+        c(
+            game,
+            timestamp,
+            Name,
+            score
+        )
+    ) %>%
+    mutate(
+        cumulative_max = cummax(
+            score
+        ),
+        is_new_max = cumulative_max != lag(
+            cumulative_max,
+            default = first(
+                cumulative_max
+            )
+        ),
+        corresponding_Name = ifelse(
+            is_new_max|row_number()==1,
+            Name,
+            NA
+        )
+    ) %>%
+    fill(
+        corresponding_Name,
+        .direction = "down"
+    ) %>%
+    select(
+        c(
+            corresponding_Name,
+            cumulative_max,
+            timestamp
+        )
+    )
+
+leader_board_table <- rbind(
+    leader_board_table,
+    data.frame(
+        Record="Highest score",
+        Holder=last(
+            highest_total_score
+        )["corresponding_Name"][[1]],
+        Value=last(
+            highest_total_score
+        )["cumulative_max"][[1]],
+        Date=last(
+            highest_total_score
+        )["timestamp"][[1]]
+    )
+)
+
+leader_board_table |> gt()
+```
