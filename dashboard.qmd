@@ -391,11 +391,10 @@ leader_board_table <- data.frame(
     Date=character()
 )
 
-# Highest total score
-highest_total_score <- stacked_player_scores |>
-    filter(
-        score_type == "total_score",
-        winner
+# Highest score per type
+highest_scores_per_type <- stacked_player_scores |>
+    group_by(
+        score_type
     ) |>
     arrange(
         game
@@ -405,7 +404,8 @@ highest_total_score <- stacked_player_scores |>
             game,
             timestamp,
             Name,
-            score
+            score,
+            score_type
         )
     ) %>%
     mutate(
@@ -422,35 +422,61 @@ highest_total_score <- stacked_player_scores |>
             is_new_max|row_number()==1,
             Name,
             NA
+        ),
+        corresponding_timestamp = ifelse(
+            is_new_max|row_number()==1,
+            timestamp,
+            NA
+        ),
+        score_type = recode(
+            score_type,
+            birds = "Most Bird Points",
+            bonus_cards = "Most Bonus Card Points",
+            duet_tokens = "Most Duet Tokens",
+            eggs = "Most Eggs Laid",
+            "end-of-round_goals" = "Most End-of-round Points",
+            food_on_cards = "Most Cached Food",
+            nectar = "Most Nectar Points",
+            total_score = "Highest Score",
+            tucked_cards = "Most Tucked Cards"
         )
     ) %>%
     fill(
         corresponding_Name,
         .direction = "down"
     ) %>%
+    fill(
+        corresponding_timestamp,
+        .direction = "down"
+    ) %>%
     select(
         c(
+            score_type,
             corresponding_Name,
             cumulative_max,
-            timestamp
+            corresponding_timestamp
         )
     )
 
-leader_board_table <- rbind(
-    leader_board_table,
-    data.frame(
-        Record="Highest score",
-        Holder=last(
-            highest_total_score
-        )["corresponding_Name"][[1]],
-        Value=last(
-            highest_total_score
-        )["cumulative_max"][[1]],
-        Date=last(
-            highest_total_score
-        )["timestamp"][[1]]
+# Records
+highest_scores_per_type |>
+    group_by(
+        score_type
+    ) |>
+    slice(n()) |>
+    rename(
+        c(
+            "Record" = score_type,
+            "Name" = corresponding_Name,
+            "Value" = cumulative_max,
+            "Date" = corresponding_timestamp
+        )
+    ) |>
+    gt(
+        groupname_col = NULL,
+        rowname_col = "Record"
+    ) |>
+    tab_header(
+        title = "Leaderboards"
     )
-)
-
-leader_board_table |> gt()
 ```
