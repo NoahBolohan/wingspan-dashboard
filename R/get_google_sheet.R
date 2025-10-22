@@ -1,3 +1,6 @@
+library(readr)
+library(stringr)
+
 get_google_sheet <- function(
     url = 'https://docs.google.com/spreadsheets/d/1K600qeRyYevSrMBUyevP4sZ4vRIBzq4ggCl3cLjHAvc',
     format = 'csv',
@@ -5,13 +8,42 @@ get_google_sheet <- function(
 ) {
 
   # Taken from Max Conway: https://github.com/maxconway/gsheet/tree/master
-  key <- stringr::str_extract(url, '[[:alnum:]_-]{30,}')
-  if(is.null(sheetId) & stringr::str_detect(url, 'gid=[[:digit:]]+')){
-    sheetId <- as.numeric(stringr::str_extract(stringr::str_extract(url,'gid=[[:digit:]]+'),'[[:digit:]]+'))
+  key <- str_extract(
+    url,
+    '[[:alnum:]_-]{30,}'
+  
+  )
+  if(
+    is.null(sheetId) && str_detect(
+      url,
+      'gid=[[:digit:]]+'
+    )
+  ) {
+    sheetId <- as.numeric(
+      str_extract(
+        str_extract(
+          url,
+          'gid=[[:digit:]]+'),
+          '[[:digit:]]+'
+        )
+      )
   }
-  address <- paste0('https://docs.google.com/spreadsheets/export?id=',key,'&format=',format)
-  if(!is.null(sheetId)){
-    address <- paste0(address, '&gid=', sheetId)
+
+  address <- paste0(
+    'https://docs.google.com/spreadsheets/export?id=',
+    key,
+    '&format=',
+    format
+  )
+
+  if(
+    !is.null(sheetId)
+  ){
+    address <- paste0(
+      address,
+      '&gid=',
+      sheetId
+    )
   }
 
   df <- read_csv(
@@ -23,6 +55,12 @@ get_google_sheet <- function(
       european_expansion = col_character(),
       oceania_expansion = col_character(),
       asia = col_character(),
+      birds_of_canada = col_character(),
+      birds_of_new_zealand = col_character(),
+      birds_of_the_usa = col_character(),
+      british_birds = col_character(),
+      birds_of_continental_europe = col_character(),
+      additional_asian_avians = col_character(),
       duet_mode = col_character(),
       player_1_name = col_character(),
       player_1_birds = col_integer(),
