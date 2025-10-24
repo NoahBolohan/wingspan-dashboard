@@ -448,33 +448,42 @@ highest_scores_per_type <- stacked_player_scores |>
     fill(
         corresponding_timestamp,
         .direction = "down"
+    ) |>
+    filter(
+        score == last(cumulative_max)
+    ) |>
+    group_by(
+        score_type,
+        Name
+    ) |>
+    slice(1) |>
+    ungroup() |>
+    arrange(
+        score_type,
+        Name
     ) %>%
     select(
         c(
             score_type,
-            corresponding_Name,
-            cumulative_max,
-            corresponding_timestamp
+            Name,
+            score,
+            timestamp
         )
     )
 
 # Records
 highest_scores_per_type |>
-    group_by(
-        score_type
-    ) |>
-    slice(n()) |>
     rename(
         c(
             "Record" = score_type,
-            "Name" = corresponding_Name,
-            "Value" = cumulative_max,
-            "Date" = corresponding_timestamp
+            "Name" = Name,
+            "Value" = score,
+            "Date" = timestamp
         )
     ) |>
     gt(
-        groupname_col = NULL,
-        rowname_col = "Record"
+        groupname_col = "Record",
+        row_group_as_column = TRUE
     ) |>
     tab_header(
         title = "Leaderboards"
