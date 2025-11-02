@@ -14,25 +14,20 @@ $theme-text-color: white;
     font-size: clamp(.1em, 5cqw, 5em) !important;
 }
 
-.gt_table {
-  font-family: 'CardenioModern', sans-serif;
+table {
+  font-family: 'CardenioModern' !important;
 }
 
 
 /* Bold navbar title */
 .navbar-title {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
-// .nav-link {
+.nav-link {
 
-//     &.active {
-//       font-weight: bold !important;
-//       color: $brand-midnight !important;
-//       background-color: $brand-peach !important;
-//     }
+    &.active {
+      font-weight: bold !important;
+    }
 
-//     &:hover {
-//       color: #fff;
-//     }
-//   }
+  }
