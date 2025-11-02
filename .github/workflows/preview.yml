@@ -40,7 +40,7 @@ jobs:
           cache-version: 1
 
       - name: Render Quarto Project
-            run: quarto render
+        run: quarto render
 
       - name: Deploy PR Preview
         uses: rossjrw/pr-preview-action@v1
