@@ -3,28 +3,48 @@ name: Deploy PR previews
 
 on:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
-
-concurrency: preview-${{ github.ref }}
+    branches:
+      - main # Or your main branch name
 
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install and Build
-        if: github.event.action != 'closed' # You might want to skip the build if the PR has been closed
+      - name: Install system dependencies
         run: |
-          npm install
-          npm run build
+          sudo apt-get update
+          sudo apt install libcurl4-openssl-dev libnode-dev libx11-dev pandoc libfontconfig1-dev libfreetype6-dev 
 
-      - name: Deploy preview
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.0'
+
+      - name: Cache R packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/R/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Install R Dependencies
+        uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 1
+
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
+
+      - name: Deploy PR Preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./build/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          source-dir: _site # Or your output directory
+          # Other optional configurations for base-url, comment-template, etc.
