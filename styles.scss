@@ -2,9 +2,37 @@
 
 $theme-text-color: white;
 
+@font-face {
+  font-family: 'CardenioModern';
+  src: url('static/cardenio_modern_font/CardenioModern-Regular.otf') format('truetype');
+}
+
 /*-- scss:rules --*/
 
 
 .quarto-dashboard .bslib-value-box .value-box-value {
     font-size: clamp(.1em, 5cqw, 5em) !important;
 }
+
+.gt_table {
+  font-family: 'CardenioModern', sans-serif;
+}
+
+
+/* Bold navbar title */
+.navbar-title {
+  font-weight: bold;
+}
+
+// .nav-link {
+
+//     &.active {
+//       font-weight: bold !important;
+//       color: $brand-midnight !important;
+//       background-color: $brand-peach !important;
+//     }
+
+//     &:hover {
+//       color: #fff;
+//     }
+//   }
