@@ -550,3 +550,75 @@ highest_scores_per_type |>
     icon = ""
   )
 ```
+
+
+```{r "Make leaderboard plot"}
+
+# Highest score per type
+historical_scores_per_type <- stacked_player_scores |>
+  group_by(
+    score_type
+  ) |>
+  arrange(
+    game
+  ) |>
+  select(
+    c(
+      game,
+      timestamp,
+      Name,
+      score,
+      score_type
+    )
+  ) %>%
+  mutate(
+    cumulative_max = cummax(
+      score
+    ),
+    is_new_max = cumulative_max !=
+      lag(
+        cumulative_max,
+        default = first(
+          cumulative_max
+        )
+      ),
+    corresponding_Name = ifelse(
+      is_new_max | row_number() == 1,
+      Name,
+      NA
+    ),
+    corresponding_timestamp = ifelse(
+      is_new_max | row_number() == 1,
+      timestamp,
+      NA
+    ),
+    corresponding_game = ifelse(
+      is_new_max | row_number() == 1,
+      game,
+      NA
+    ),
+    score_type = recode(
+      score_type,
+      birds = "Most Bird Points",
+      bonus_cards = "Most Bonus Card Points",
+      duet_tokens = "Most Duet Tokens",
+      eggs = "Most Eggs Laid",
+      "end-of-round_goals" = "Most End-of-round Points",
+      food_on_cards = "Most Cached Food",
+      nectar = "Most Nectar Points",
+      total_score = "Highest Score",
+      tucked_cards = "Most Tucked Cards"
+    )
+  ) |>
+  fill(
+    c(corresponding_Name, corresponding_timestamp, corresponding_game),
+    .direction = "down"
+  )
+
+historical_scores_per_type |>
+  filter(score_type == "Highest Score") |>
+  ggplot() +
+  geom_point(aes(x = game, y = cumulative_max, colour = corresponding_Name)) +
+  theme_minimal()
+
+```
