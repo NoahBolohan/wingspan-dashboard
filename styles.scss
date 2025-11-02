@@ -1,3 +1,10 @@
+/*-- scss:defaults --*/
+
+$theme-text-color: white;
+
+/*-- scss:rules --*/
+
+
 .quarto-dashboard .bslib-value-box .value-box-value {
     font-size: clamp(.1em, 5cqw, 5em) !important;
 }
