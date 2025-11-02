@@ -1,0 +1,28 @@
+color:
+  palette:
+    dark-grey: "#4C5766"
+    light-grey: "#AAB9CC"
+    dark-pink: "#D05478"
+    light-pink: "#E9A7BB"
+    blue-grey: "#8390A2"
+    blush: "#fee6e4ff" # this value is a lighter version of the true galah-blush
+  foreground: dark-grey
+  background: blush
+  primary: light-pink
+  danger: dark-pink
+
+typography:
+  fonts:
+    - family: CardenioModern
+      source: file
+      files:
+        - path: static/cardenio_modern_font/CardenioModern-Regular.otf
+          style: normal
+        - path: static/cardenio_modern_font/CardenioModern-Bold.otf
+          weight: bold
+
+  base: CardenioModern
+  headings:
+    family: CardenioModern
+    weight: 500
+  monospace: IBM Plex Mono

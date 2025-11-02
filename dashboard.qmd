@@ -1,14 +1,8 @@
----
-title: "Wingspan Data"
-author: "Noah Bolohan"
-format:
-  dashboard:
-    nav-buttons:
-      - icon: github
-        href: https://github.com/NoahBolohan/wingspan-dashboard
-    css:
-      styles.css
----
+--- 
+title: "Wingspan Dashboard"
+author: ""
+format: dashboard
+--- 
 
 ```{r "imports"}
 library(tidyverse)
@@ -17,13 +11,13 @@ library(plotly)
 library(slider)
 
 invisible(
-    lapply(
-        list.files(
-            "./R",
-            full.names = TRUE
-        ),
-        source
-    )
+  lapply(
+    list.files(
+      "./R",
+      full.names = TRUE
+    ),
+    source
+  )
 )
 ```
 
@@ -33,30 +27,30 @@ wingspan_scores <- get_google_sheet(
 )
 
 wingspan_scores <- wingspan_scores |>
-    mutate(
-        game = 1:nrow(
-            wingspan_scores
-        ),
-        .before = 1
-    )
+  mutate(
+    game = 1:nrow(
+      wingspan_scores
+    ),
+    .before = 1
+  )
 ```
 
 ```{r "Stacked player score"}
 stacked_player_scores <- lapply(
-        1:7,
-        iterative_pivot,
-        df = wingspan_scores
-    ) |> 
-    bind_rows() |>
-    drop_na() |>
-    group_by(game) |>
-    mutate(
-        winner = case_when(
-        score >= max(score, na.rm = TRUE) ~ TRUE,
-        .default = FALSE
-        )
-    ) |>
-    ungroup()
+  1:7,
+  iterative_pivot,
+  df = wingspan_scores
+) |>
+  bind_rows() |>
+  drop_na() |>
+  group_by(game) |>
+  mutate(
+    winner = case_when(
+      score >= max(score, na.rm = TRUE) ~ TRUE,
+      .default = FALSE
+    )
+  ) |>
+  ungroup()
 ```
 
 # Home
@@ -80,7 +74,7 @@ Tips:
 list(
   icon = "clock-history",
   value = format(
-    now(tzone="America/New_York"),
+    now(tzone = "America/New_York"),
     "%b. %d, '%y, %H:%M"
   )
 )
@@ -91,118 +85,121 @@ list(
 ```{r "Table: Summary"}
 
 stacked_player_scores |>
-    filter(
-        score_type == "total_score"
-    ) |>
-    group_by(
-        Name
-    ) |>
-    mutate(
-        group_size = n()
-    ) |> 
-    filter(
-        group_size >= 10
-    ) |>
-    arrange(
-        game
-    ) |>
-    mutate(
-        "N" = n(),
-        "Won" = sum(winner),
-        "%" = round(
-            100 * sum(
-                winner
-            ) / n(),
-            1
-        ),
-        "Max" = max(score),
-        "Min" = min(score),
-        "Mean" = round(
-            mean(score),
-            1
-        )
-    ) |>
-    select(
-        c(
-            Name,
-            "N",
-            "Won",
-            "%",
-            "Max",
-            "Min",
-            "Mean"
-        )
-    ) |>
-    filter(
-        row_number() == 1
-    ) |>
-    mutate(
-        Name = str_trunc(
-            Name,
-            width=7
-        )
-    ) |>
-    arrange(
-        Name
-    ) |>
-    gt(
-        groupname_col = NULL,
-        rowname_col = "Name"
-    ) |>
-    tab_header(
-        title = "Summary statistics",
-        subtitle = "Min. 10 games played"
+  filter(
+    score_type == "total_score"
+  ) |>
+  group_by(
+    Name
+  ) |>
+  mutate(
+    group_size = n()
+  ) |>
+  filter(
+    group_size >= 10
+  ) |>
+  arrange(
+    game
+  ) |>
+  mutate(
+    "N" = n(),
+    "Won" = sum(winner),
+    "%" = round(
+      100 *
+        sum(
+          winner
+        ) /
+        n(),
+      1
+    ),
+    "Max" = max(score),
+    "Min" = min(score),
+    "Mean" = round(
+      mean(score),
+      1
     )
+  ) |>
+  select(
+    c(
+      Name,
+      "N",
+      "Won",
+      "%",
+      "Max",
+      "Min",
+      "Mean"
+    )
+  ) |>
+  filter(
+    row_number() == 1
+  ) |>
+  mutate(
+    Name = str_trunc(
+      Name,
+      width = 7
+    )
+  ) |>
+  arrange(
+    Name
+  ) |>
+  gt(
+    groupname_col = NULL,
+    rowname_col = "Name"
+  ) |>
+  tab_header(
+    title = "Summary statistics",
+    subtitle = "Min. 10 games played"
+  )
 
 ```
 
 ```{r "Plot: Total score per game"}
 
 player_scores_total <- stacked_player_scores |>
-    filter(
-        score_type == "total_score"
-    ) |>
-    group_by(
-        Name
-    ) |>
-    mutate(
-        group_size = n()
-    ) |> 
-    filter(
-        group_size >= 10
-    ) |>
-    arrange(
-        game
-    ) |>
-    mutate(
-        game_number = row_number()
-    ) %>%
-    split(
-        .,
-        .$Name
-    )
+  filter(
+    score_type == "total_score"
+  ) |>
+  group_by(
+    Name
+  ) |>
+  mutate(
+    group_size = n()
+  ) |>
+  filter(
+    group_size >= 10
+  ) |>
+  arrange(
+    game
+  ) |>
+  mutate(
+    game_number = row_number()
+  ) %>%
+  split(
+    .,
+    .$Name
+  )
 
 p <- player_scores_total[[1]] %>%
-    plot_ly( 
-        x = ~game_number,
-        y = ~score,
-        type = "scatter",
-        mode = "lines",
-        visible = TRUE
-    )   
+  plot_ly(
+    x = ~game_number,
+    y = ~score,
+    type = "scatter",
+    mode = "lines",
+    visible = TRUE
+  )
 
 for (name in names(player_scores_total)[-1]) {
-    if (name != "Alex") {
-        p <- p %>% add_lines(
-            data = player_scores_total[[name]],
-            x = ~game_number,
-            y = ~score,
-            visible = FALSE,
-            name = name
-        )
-    }
+  if (name != "Alex") {
+    p <- p %>%
+      add_lines(
+        data = player_scores_total[[name]],
+        x = ~game_number,
+        y = ~score,
+        visible = FALSE,
+        name = name
+      )
+  }
 }
-  
+
 pp <- p %>%
   layout(
     title = list(
@@ -214,50 +211,50 @@ pp <- p %>%
     yaxis = list(title = "Score"),
     showlegend = FALSE,
     margin = list(
-        l=40,
-        r=0
+      l = 40,
+      r = 0
     ),
     updatemenus = list(
-        list(
-            y = 1.15,
-            yanchor="top",
-            x = 0.99,
-            xanchor = "right",
-            buttons = lapply(
-                names(player_scores_total),
-                function(name) {
-                    list(
-                        method="update", 
-                        args = list(
-                            list(
-                                visible = as.logical(
-                                    match(
-                                        names(
-                                            player_scores_total
-                                        ),
-                                        name,
-                                        nomatch=FALSE
-                                    )
-                                )
-                            )
-                        ),
-                        label = name
+      list(
+        y = 1.15,
+        yanchor = "top",
+        x = 0.99,
+        xanchor = "right",
+        buttons = lapply(
+          names(player_scores_total),
+          function(name) {
+            list(
+              method = "update",
+              args = list(
+                list(
+                  visible = as.logical(
+                    match(
+                      names(
+                        player_scores_total
+                      ),
+                      name,
+                      nomatch = FALSE
                     )
-                }
+                  )
+                )
+              ),
+              label = name
             )
+          }
         )
+      )
     )
   ) |>
   config(
     modeBarButtonsToRemove = list(
-        "zoom2d",
-        "pan2d",
-        "toImage",
-        "zoomIn2d",
-        "zoomOut2d",
-        "autoScale2d",
-        "hoverCompareCartesian",
-        "hoverClosestCartesian"
+      "zoom2d",
+      "pan2d",
+      "toImage",
+      "zoomIn2d",
+      "zoomOut2d",
+      "autoScale2d",
+      "hoverCompareCartesian",
+      "hoverClosestCartesian"
     ),
     displayModeBar = FALSE
   )
@@ -268,56 +265,58 @@ pp
 ```{r "Plot: Rolling win rate"}
 
 player_scores_total <- stacked_player_scores |>
-    filter(
-        score_type == "total_score"
-    ) |>
-    group_by(
-        Name
-    ) |>
-    mutate(
-        group_size = n()
-    ) |> 
-    filter(
-        group_size >= 10
-    ) |>
-    arrange(
-        game
-    ) |>
-    mutate(
-        game_number = row_number(),
-        rolling_wr = 100 * slide_dbl(
-            winner,
-            mean,
-            .before = 50,
-            .after = 0
-        )
-    ) %>%
-    split(
-        .,
-        .$Name
-    )
+  filter(
+    score_type == "total_score"
+  ) |>
+  group_by(
+    Name
+  ) |>
+  mutate(
+    group_size = n()
+  ) |>
+  filter(
+    group_size >= 10
+  ) |>
+  arrange(
+    game
+  ) |>
+  mutate(
+    game_number = row_number(),
+    rolling_wr = 100 *
+      slide_dbl(
+        winner,
+        mean,
+        .before = 50,
+        .after = 0
+      )
+  ) %>%
+  split(
+    .,
+    .$Name
+  )
 
 p <- player_scores_total[[1]] %>%
-    plot_ly( 
-        x = ~game_number,
-        y = ~rolling_wr,
-        type = "scatter",
-        mode = "lines",
-        visible = TRUE
-    )   
+  plot_ly(
+    x = ~game_number,
+    y = ~rolling_wr,
+    type = "scatter",
+    mode = "lines",
+    visible = TRUE
+  )
 
 for (name in names(player_scores_total)[-1]) {
-    if (name != "Alex") {
-        p <- p %>% add_lines(
-            data = player_scores_total[[name]],
-            x = ~game_number,
-            y = ~rolling_wr,
-            visible = FALSE,
-            name = name
-        )
-    }
+  if (name != "Alex") {
+    p <- p %>%
+      add_lines(
+        data = player_scores_total[[name]],
+        x = ~game_number,
+        y = ~rolling_wr,
+        visible = FALSE,
+        name = name
+      )
+  }
 }
-  
+
 pp <- p %>%
   layout(
     title = list(
@@ -329,50 +328,50 @@ pp <- p %>%
     yaxis = list(title = "Win rate (%)"),
     showlegend = FALSE,
     margin = list(
-        l=40,
-        r=0
+      l = 40,
+      r = 0
     ),
     updatemenus = list(
-        list(
-            y = 1.15,
-            yanchor="top",
-            x = 0.99,
-            xanchor = "right",
-            buttons = lapply(
-                names(player_scores_total),
-                function(name) {
-                    list(
-                        method="update", 
-                        args = list(
-                            list(
-                                visible = as.logical(
-                                    match(
-                                        names(
-                                            player_scores_total
-                                        ),
-                                        name,
-                                        nomatch=FALSE
-                                    )
-                                )
-                            )
-                        ),
-                        label = name
+      list(
+        y = 1.15,
+        yanchor = "top",
+        x = 0.99,
+        xanchor = "right",
+        buttons = lapply(
+          names(player_scores_total),
+          function(name) {
+            list(
+              method = "update",
+              args = list(
+                list(
+                  visible = as.logical(
+                    match(
+                      names(
+                        player_scores_total
+                      ),
+                      name,
+                      nomatch = FALSE
                     )
-                }
+                  )
+                )
+              ),
+              label = name
             )
+          }
         )
+      )
     )
   ) |>
   config(
     modeBarButtonsToRemove = list(
-        "zoom2d",
-        "pan2d",
-        "toImage",
-        "zoomIn2d",
-        "zoomOut2d",
-        "autoScale2d",
-        "hoverCompareCartesian",
-        "hoverClosestCartesian"
+      "zoom2d",
+      "pan2d",
+      "toImage",
+      "zoomIn2d",
+      "zoomOut2d",
+      "autoScale2d",
+      "hoverCompareCartesian",
+      "hoverClosestCartesian"
     ),
     displayModeBar = FALSE
   )
@@ -385,107 +384,108 @@ pp
 ```{r "Compute leaderboard records"}
 
 leader_board_table <- data.frame(
-    Record=character(),
-    Holder=character(),
-    Value=integer(),
-    Date=character()
+  Record = character(),
+  Holder = character(),
+  Value = integer(),
+  Date = character()
 )
 
 # Highest score per type
 highest_scores_per_type <- stacked_player_scores |>
-    group_by(
-        score_type
-    ) |>
-    arrange(
-        game
-    ) |>
-    select(
-        c(
-            game,
-            timestamp,
-            Name,
-            score,
-            score_type
-        )
-    ) %>%
-    mutate(
-        cumulative_max = cummax(
-            score
-        ),
-        is_new_max = cumulative_max != lag(
-            cumulative_max,
-            default = first(
-                cumulative_max
-            )
-        ),
-        corresponding_Name = ifelse(
-            is_new_max|row_number()==1,
-            Name,
-            NA
-        ),
-        corresponding_timestamp = ifelse(
-            is_new_max|row_number()==1,
-            timestamp,
-            NA
-        ),
-        score_type = recode(
-            score_type,
-            birds = "Most Bird Points",
-            bonus_cards = "Most Bonus Card Points",
-            duet_tokens = "Most Duet Tokens",
-            eggs = "Most Eggs Laid",
-            "end-of-round_goals" = "Most End-of-round Points",
-            food_on_cards = "Most Cached Food",
-            nectar = "Most Nectar Points",
-            total_score = "Highest Score",
-            tucked_cards = "Most Tucked Cards"
-        )
-    ) %>%
-    fill(
-        corresponding_Name,
-        .direction = "down"
-    ) %>%
-    fill(
-        corresponding_timestamp,
-        .direction = "down"
-    ) |>
-    filter(
-        score == last(cumulative_max)
-    ) |>
-    group_by(
-        score_type,
-        Name
-    ) |>
-    slice(1) |>
-    ungroup() |>
-    arrange(
-        score_type,
-        Name
-    ) %>%
-    select(
-        c(
-            score_type,
-            Name,
-            score,
-            timestamp
-        )
+  group_by(
+    score_type
+  ) |>
+  arrange(
+    game
+  ) |>
+  select(
+    c(
+      game,
+      timestamp,
+      Name,
+      score,
+      score_type
     )
+  ) %>%
+  mutate(
+    cumulative_max = cummax(
+      score
+    ),
+    is_new_max = cumulative_max !=
+      lag(
+        cumulative_max,
+        default = first(
+          cumulative_max
+        )
+      ),
+    corresponding_Name = ifelse(
+      is_new_max | row_number() == 1,
+      Name,
+      NA
+    ),
+    corresponding_timestamp = ifelse(
+      is_new_max | row_number() == 1,
+      timestamp,
+      NA
+    ),
+    score_type = recode(
+      score_type,
+      birds = "Most Bird Points",
+      bonus_cards = "Most Bonus Card Points",
+      duet_tokens = "Most Duet Tokens",
+      eggs = "Most Eggs Laid",
+      "end-of-round_goals" = "Most End-of-round Points",
+      food_on_cards = "Most Cached Food",
+      nectar = "Most Nectar Points",
+      total_score = "Highest Score",
+      tucked_cards = "Most Tucked Cards"
+    )
+  ) %>%
+  fill(
+    corresponding_Name,
+    .direction = "down"
+  ) %>%
+  fill(
+    corresponding_timestamp,
+    .direction = "down"
+  ) |>
+  filter(
+    score == last(cumulative_max)
+  ) |>
+  group_by(
+    score_type,
+    Name
+  ) |>
+  slice(1) |>
+  ungroup() |>
+  arrange(
+    score_type,
+    Name
+  ) %>%
+  select(
+    c(
+      score_type,
+      Name,
+      score,
+      timestamp
+    )
+  )
 
 # Records
 highest_scores_per_type |>
-    rename(
-        c(
-            "Record" = score_type,
-            "Name" = Name,
-            "Value" = score,
-            "Date" = timestamp
-        )
-    ) |>
-    gt(
-        groupname_col = "Record",
-        row_group_as_column = TRUE
-    ) |>
-    tab_header(
-        title = "Leaderboards"
+  rename(
+    c(
+      "Record" = score_type,
+      "Name" = Name,
+      "Value" = score,
+      "Date" = timestamp
     )
+  ) |>
+  gt(
+    groupname_col = "Record",
+    row_group_as_column = TRUE
+  ) |>
+  tab_header(
+    title = "Leaderboards"
+  )
 ```
