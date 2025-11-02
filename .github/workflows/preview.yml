@@ -39,8 +39,8 @@ jobs:
         with:
           cache-version: 1
 
-      - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
+      - name: Render Quarto Project
+            run: quarto render
 
       - name: Deploy PR Preview
         uses: rossjrw/pr-preview-action@v1
