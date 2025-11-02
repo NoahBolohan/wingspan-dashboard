@@ -1,6 +1,5 @@
 format: 
   dashboard:
-    logo: logo.svg
     nav-buttons: 
       - icon: github
         href: https://github.com/NoahBolohan/wingspan-dashboard

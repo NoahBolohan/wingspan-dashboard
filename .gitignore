@@ -56,3 +56,4 @@ rsconnect/
 .vdoc.*
 
 /dashboard_files/
+dashboard.html
