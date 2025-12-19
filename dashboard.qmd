@@ -39,6 +39,16 @@ wingspan_scores <- wingspan_scores |>
         ),
         .before = 1
     )
+
+flock_mode_scores <- wingspan_scores |>
+    filter(
+        n_players >= 6
+    )
+
+wingspan_scores <- wingspan_scores |>
+    filter(
+        n_players < 6
+    )
 ```
 
 ```{r "Stacked player score"}
