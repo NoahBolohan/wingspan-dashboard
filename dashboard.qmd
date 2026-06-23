@@ -31,8 +31,25 @@ invisible(
 ```{r "Download Google Sheet"}
 wingspan_scores <- get_google_sheet(
   sheetId = 2096833443
-)
-
+) %>%
+  mutate(
+    timestamp = if_else(
+      !is.na(
+        mdy(
+          .$timestamp
+        )
+      ),
+      .$timestamp |>
+        mdy() |>
+        as.character(),
+      .$timestamp |>
+        as.character()
+    )
+  ) |>
+  arrange(
+    timestamp
+  )
+  
 wingspan_scores <- wingspan_scores |>
     mutate(
         game = 1:nrow(
