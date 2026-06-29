@@ -555,11 +555,7 @@ highest_scores_per_type |>
       format = "%m/%d/%Y"
     )
   ) |>
-  # group_by(Record) |>
-  # arrange(
-  #   Date,
-  #   .by_group = TRUE
-  # ) |>
+  group_by(Record) |>
   arrange(
     factor(
       Record,
