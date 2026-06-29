@@ -483,13 +483,14 @@ highest_scores_per_type <- stacked_player_scores |>
       score_type,
       birds = "Most Bird Points",
       bonus_cards = "Most Bonus Card Points",
-      duet_tokens = "Most Duet Tokens",
-      eggs = "Most Eggs Laid",
       "end-of-round_goals" = "Most End-of-round Points",
+      eggs = "Most Eggs Laid",
       food_on_cards = "Most Cached Food",
+      tucked_cards = "Most Tucked Cards",
       nectar = "Most Nectar Points",
-      total_score = "Highest Score",
-      tucked_cards = "Most Tucked Cards"
+      duet_tokens = "Most Duet Tokens",
+      hummingbird_track = "Hummingbird Track",
+      total_score = "Highest Score"
     )
   ) %>%
   fill(
@@ -510,7 +511,21 @@ highest_scores_per_type <- stacked_player_scores |>
   slice(1) |>
   ungroup() |>
   arrange(
-    score_type,
+    factor(
+      score_type,
+      levels = c(
+        "Highest Score",
+        "Most Bird Points",
+        "Most Bonus Card Points",
+        "Most End-of-round Points",
+        "Most Eggs Laid",
+        "Most Cached Food",
+        "Most Tucked Cards",
+        "Most Nectar Points",
+        "Most Duet Tokens",
+        "Highest Hummingbird Track"
+      )
+    ),
     Name
   ) %>%
   select(
@@ -532,9 +547,37 @@ highest_scores_per_type |>
       "Date" = timestamp
     )
   ) |>
-  mutate(Date = as.Date(Date, "%m/%d/%Y")) |>
-  group_by(Record) |>
-  arrange(Date, .by_group = TRUE) |>
+  mutate(
+    Date = format(
+      as.Date(
+        Date
+      ),
+      format = "%m/%d/%Y"
+    )
+  ) |>
+  # group_by(Record) |>
+  # arrange(
+  #   Date,
+  #   .by_group = TRUE
+  # ) |>
+  arrange(
+    factor(
+      Record,
+      levels = c(
+        "Highest Score",
+        "Most Bird Points",
+        "Most Bonus Card Points",
+        "Most End-of-round Points",
+        "Most Eggs Laid",
+        "Most Cached Food",
+        "Most Tucked Cards",
+        "Most Nectar Points",
+        "Most Duet Tokens",
+        "Highest Hummingbird Track"
+      )
+    ),
+    Date
+  ) |>
   mutate(
     icon = case_when(
       first(Name) == Name ~ "trophy",
