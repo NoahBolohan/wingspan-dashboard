@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "leaderboard.html",
+    "href": "leaderboard.html",
+    "title": "Records & Leaderboard",
+    "section": "",
+    "text": "Records\n    \n    \n    \n      Name\n      \n      \n      \n      Total\n    \n  \n  \n    Alex\n3\n3\n4\n10\n    Joey\n0\n0\n0\n0\n    Meadow\n0\n0\n0\n0\n    Mila\n1\n1\n0\n2\n    Noah\n6\n6\n5\n17\n    Rambouillet\n0\n0\n0\n0\n  \n  \n\n\n\n\n\n\n\n\n\n  \n    \n      Leaderboard\n    \n    \n    \n      \n      \n      Name\n      Value\n      Date\n    \n  \n  \n    Highest Score\nTrophy\nAlex\n178\n02/27/2025\n    Trophy\nNoah\n147\n02/03/2025\n    Trophy\nNoah\n143\n01/19/2025\n    Most Bird Points\nTrophy\nNoah\n72\n06/21/2026\n    Trophy\nAlex\n69\n04/13/2026\n    Trophy\nNoah\n67\n02/27/2025\n    Most Bonus Card Points\nTrophy\nAlex\n50\n07/13/2025\n    Trophy\nNoah\n31\n02/27/2025\n    Trophy\nAlex\n28\n02/15/2025\n    Most End-of-round Points\nTrophy\nMila\n22\n12/22/2024\n    Trophy\nNoah\n22\n01/14/2025\n    Trophy\nAlex\n22\n01/22/2025\n    \nJoey\n22\n11/21/2025\n    Most Eggs Laid\nTrophy\nNoah\n44\n08/17/2026\n    Trophy\nNoah\n43\n02/16/2025\n    Trophy\nNoah\n38\n01/22/2025\n    Most Cached Food\nTrophy\nNoah\n38\n06/26/2025\n    Trophy\nNoah\n35\n01/06/2025\n    Trophy\nNoah\n15\n12/26/2024\n    Most Tucked Cards\nTrophy\nAlex\n98\n02/25/2025\n    Trophy\nNoah\n90\n01/12/2025\n    Trophy\nAlex\n70\n01/06/2025\n    Most Nectar Points\nTrophy\nNoah\n15\n12/28/2024\n    Trophy\nMila\n15\n01/10/2025\n    Trophy\nAlex\n15\n01/19/2025\n    \nJoey\n15\n05/28/2025\n    Most Duet Tokens\nTrophy\nNoah\n13\n08/03/2025\n    Trophy\nAlex\n10\n12/27/2024\n    Trophy\nNoah\n10\n06/27/2025\n    Hummingbird Track\nTrophy\nNoah\n17\n06/29/2026\n    Trophy\nAlex\n15\n06/29/2026\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Wingspan Stats",
+    "section": "",
+    "text": "Some summary data for all recorded games of Wingspan in my score sheet. Only players with &gt;= 10 games recorded are included in these summaries.\nData\nLeaderboard\nTips:\n\nDrag on plots to zoom in\nDouble-tap plots to reset\nDashboard data refreshes daily at 7am Eastern or when I make a change\n\n\n\n\n\n\n\n\n\n\nLast updated\nAug. 24, '26, 11:10\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "Data",
+    "section": "",
+    "text": "Summary statistics\n    \n    \n      Min. 10 games played\n    \n    \n      \n      N\n      Won\n      %\n      Max\n      Min\n      Mean\n    \n  \n  \n    Alex\n225\n107\n47.6\n178\n67\n103.3\n    Joey\n40\n17\n42.5\n116\n77\n96.6\n    Meadow\n95\n0\n0.0\n90\n47\n74.6\n    Mila\n381\n130\n34.1\n140\n59\n94.5\n    Noah\n628\n387\n61.6\n151\n63\n102.6\n    Ramb...\n95\n0\n0.0\n93\n43\n75.9\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  }
+]
