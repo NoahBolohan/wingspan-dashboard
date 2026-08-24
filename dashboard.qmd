@@ -10,6 +10,7 @@ library(gt)
 library(plotly)
 library(slider)
 library(systemfonts)
+library(fontawesome)
 
 # Path to your local font file
 font_path <- "static/cardenio_modern_font/CardenioModern-Regular.otf"
@@ -501,14 +502,27 @@ highest_scores_per_type <- stacked_player_scores |>
     corresponding_timestamp,
     .direction = "down"
   ) |>
-  filter(
-    score == last(cumulative_max)
+  group_by(
+    score_type
   ) |>
+  filter(
+    score > 0,
+    (is_new_max == 1) | (score == cumulative_max)
+  ) |>
+  slice_max(
+    order_by = score,
+    n = 3
+  ) |>
+  ungroup() |>
   group_by(
     score_type,
+    score,
     Name
   ) |>
-  slice(1) |>
+  slice_min(
+    order_by = timestamp,
+    n = 1
+  ) |>
   ungroup() |>
   arrange(
     factor(
@@ -526,7 +540,7 @@ highest_scores_per_type <- stacked_player_scores |>
         "Highest Hummingbird Track"
       )
     ),
-    Name
+    desc(score)
   ) %>%
   select(
     c(
@@ -538,7 +552,7 @@ highest_scores_per_type <- stacked_player_scores |>
   )
 
 # Records
-highest_scores_per_type |>
+records <- highest_scores_per_type |>
   rename(
     c(
       "Record" = score_type,
@@ -553,7 +567,8 @@ highest_scores_per_type |>
         Date
       ),
       format = "%m/%d/%Y"
-    )
+    ) |>
+    mdy()
   ) |>
   group_by(Record) |>
   arrange(
@@ -572,15 +587,118 @@ highest_scores_per_type |>
         "Highest Hummingbird Track"
       )
     ),
+    desc(Value),
     Date
   ) |>
   mutate(
     icon = case_when(
-      first(Name) == Name ~ "trophy",
+      row_number() <= 3 ~ "trophy",
+      .default = NA
+    ),
+    fill_colour = case_when(
+      row_number() == 1 ~ "gold",
+      row_number() == 2 ~ "silver",
+      row_number() == 3 ~ "#CD7F32",
       .default = NA
     ),
     .before = Name
   ) |>
+  mutate(
+    Date = format(
+      as.Date(
+        Date
+      ),
+      format = "%m/%d/%Y"
+    )
+  )
+```
+```{r "Generate leaderboard aggregate table"}
+unique_names_ge_10 <- stacked_player_scores |>
+  filter(
+    score_type == "total_score"
+  ) |>
+  group_by(
+    Name
+  ) |>
+  summarise(
+    group_size = n()
+  ) |>
+  filter(
+    group_size >= 10
+  ) |>
+  pull(Name)
+
+expand_grid(
+  Name = unique_names_ge_10,
+  fill_colour = c(
+    "gold",
+    "silver",
+    "#CD7F32"
+  )
+) |>
+  left_join(
+    records |>
+      group_by(
+        Name,
+        fill_colour
+      ) |>
+      summarise(
+        count = n()
+      )
+  ) |>
+  mutate(
+    count = replace_na(
+      count,
+      0
+    )
+  ) |>
+  pivot_wider(
+    names_from = fill_colour,
+    values_from = count
+  ) |>
+  mutate(
+    Total = gold + silver + `#CD7F32`
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Records"
+  ) |>
+  cols_label(
+    # Wrap the fa() output in html() so gt processes it as HTML
+    gold = html(
+      fa(
+        "trophy",
+        fill = "gold"
+      )
+    ),
+    silver = html(
+      fa(
+        "trophy",
+        fill = "silver"
+      )
+    ),
+    `#CD7F32` = html(
+      fa(
+        "trophy",
+        fill = "#CD7F32"
+      )
+    )
+  ) |>
+  tab_options(
+    table.background.color = "#4C5766",
+    table.font.size = px(16)
+  ) |>
+  opt_css(
+    css = "
+    table tr:hover {
+      background-color: var(--brand-blue-grey);
+    }
+    "
+  )
+```
+
+```{r "Generate leaderboard detailed table"}
+records |>
   gt(
     groupname_col = "Record",
     row_group_as_column = TRUE
@@ -591,10 +709,18 @@ highest_scores_per_type |>
   fmt_icon(
     icon,
     height = "1em",
-    fill_color = "gold"
+    fill_color = from_column(
+      "fill_colour"
+    )
+  ) |>
+  cols_hide(
+    columns = fill_colour
   ) |>
   cols_align(
-    c(icon, Date),
+    c(
+      icon,
+      Date
+    ),
     align = "center"
   ) |>
   tab_options(
