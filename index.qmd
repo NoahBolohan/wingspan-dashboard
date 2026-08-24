@@ -1,0 +1,35 @@
+---
+title: "Wingspan Stats"
+execute:
+  echo: false
+  warning: false
+  error: false
+---
+
+Some summary data for all recorded games of Wingspan in [my score sheet](https://docs.google.com/spreadsheets/d/1K600qeRyYevSrMBUyevP4sZ4vRIBzq4ggCl3cLjHAvc/edit?usp=sharing). Only players with >= 10 games recorded are included in these summaries.
+
+
+[Data](./data.qmd)
+
+[Leaderboard](./leaderboard.qmd)
+
+Tips:
+
+- Drag on plots to zoom in
+- Double-tap plots to reset
+- Dashboard data refreshes daily at 7am Eastern or when I make a change
+
+```{r "Text: last update (data)"}
+library(lubridate)
+library(bslib)
+library(bsicons)
+
+value_box(
+  title = "Last updated",
+  value = format(
+    now(tzone = "America/New_York"),
+    "%b. %d, '%y, %H:%M"
+  ),
+  showcase = bsicons::bs_icon("clock-history")
+)
+```

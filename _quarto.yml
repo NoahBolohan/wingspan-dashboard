@@ -1,10 +1,43 @@
-format: 
-  dashboard:
+project:
+  type: website
+
+lang: en
+
+website:
+  title: Wingspan Data
+  back-to-top-navigation: true
+  page-navigation: true
+
+  site-url: https://noahbolohan.github.io/wingspan-dashboard/
+  repo-url: https://github.com/NoahBolohan/wingspan-dashboard
+  repo-actions: [issue, source]
+
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Data"
+        href: data.qmd
+      - text: "Leaderboard"
+        href: leaderboard.qmd
+    right:
+    - icon: git
+      menu:
+        - text: Source code
+          url: https://github.com/NoahBolohan/wingspan-dashboard
+        - text: Report an issue
+          url:  https://github.com/NoahBolohan/wingspan-dashboard/-/issues/new
+
+format:
+  html:
+    logo: logo.svg
     nav-buttons: 
       - icon: github
-        href: https://github.com/NoahBolohan/wingspan-dashboard
+        href: https://github.com/Alex-and-Noah/pwhl-fantasy-league
     theme:
       - brand
       - styles.scss
-    scrolling: true 
-    expandable: false
+    toc: true
+    html-table-processing: none
