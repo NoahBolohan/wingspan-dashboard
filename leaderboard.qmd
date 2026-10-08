@@ -52,7 +52,25 @@ wingspan_scores <- get_google_sheet(
   arrange(
     timestamp
   )
+
+flock_mode_scores <- wingspan_scores |>
+  filter(
+      n_players >= 6
+  )
+
+wingspan_scores <- wingspan_scores |>
+    filter(
+        n_players < 6
+    )
   
+flock_mode_scores <- flock_mode_scores |>
+    mutate(
+        game = 1:nrow(
+            flock_mode_scores
+        ),
+        .before = 1
+    )
+
 wingspan_scores <- wingspan_scores |>
     mutate(
         game = 1:nrow(
@@ -61,15 +79,6 @@ wingspan_scores <- wingspan_scores |>
         .before = 1
     )
 
-flock_mode_scores <- wingspan_scores |>
-    filter(
-        n_players >= 6
-    )
-
-wingspan_scores <- wingspan_scores |>
-    filter(
-        n_players < 6
-    )
 ```
 
 ```{r "Stacked player score"}
@@ -464,10 +473,12 @@ historical_scores_per_type <- stacked_player_scores |>
   fill(
     c(corresponding_Name, corresponding_timestamp, corresponding_game),
     .direction = "down"
+  ) |>
+  filter(
+    score_type == "Highest Score"
   )
 
 historical_scores_per_type |>
-  filter(score_type == "Highest Score") |>
   ggplot() +
   geom_point(aes(x = game, y = cumulative_max, colour = corresponding_Name)) +
   theme_minimal()
