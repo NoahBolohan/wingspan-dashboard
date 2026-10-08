@@ -101,11 +101,13 @@ leader_board_table <- data.frame(
 
 # Highest score per type
 highest_scores_per_type <- stacked_player_scores |>
+# stacked_player_scores |>
   group_by(
     score_type
   ) |>
   arrange(
-    game
+    game,
+    .by_group = TRUE
   ) |>
   select(
     c(
@@ -159,27 +161,27 @@ highest_scores_per_type <- stacked_player_scores |>
     corresponding_timestamp,
     .direction = "down"
   ) |>
-  group_by(
-    score_type
-  ) |>
-  filter(
-    score > 0,
-    (is_new_max == 1) | (score == cumulative_max)
-  ) |>
+  # group_by(
+  #   score_type
+  # ) |>
+  # filter(
+  #   score > 0,
+  #   (is_new_max == 1) | (score == cumulative_max)
+  # ) |>
   slice_max(
     order_by = score,
     n = 3
   ) |>
-  ungroup() |>
-  group_by(
-    score_type,
-    score,
-    Name
-  ) |>
-  slice_min(
-    order_by = timestamp,
-    n = 1
-  ) |>
+  # ungroup() |>
+  # group_by(
+  #   score_type,
+  #   score
+  # ) |>
+  slice_head(n=3) |>
+  # slice_min(
+  #   order_by = score,
+  #   n = 1
+  # ) |>
   ungroup() |>
   arrange(
     factor(
