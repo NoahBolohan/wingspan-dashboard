@@ -4,14 +4,14 @@
     "href": "data.html",
     "title": "Data",
     "section": "",
-    "text": "Summary statistics\n    \n    \n      Min. 10 games played\n    \n    \n      \n      N\n      Won\n      %\n      Max\n      Min\n      Mean\n    \n  \n  \n    Alex\n247\n119\n48.2\n178\n67\n104.3\n    Joey\n44\n18\n40.9\n116\n77\n96.3\n    Meadow\n114\n0\n0.0\n90\n46\n74.7\n    Mila\n385\n130\n33.8\n140\n59\n94.5\n    Noah\n658\n404\n61.4\n151\n63\n103.0\n    Ramb...\n115\n0\n0.0\n93\n43\n76.0\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+    "text": "Summary statistics\n    \n    \n      Min. 10 games played\n    \n    \n      \n      N\n      Won\n      %\n      Max\n      Min\n      Mean\n    \n  \n  \n    Alex\n250\n120\n48.0\n178\n67\n104.4\n    Joey\n44\n18\n40.9\n116\n77\n96.3\n    Meadow\n117\n0\n0.0\n90\n46\n74.8\n    Mila\n385\n130\n33.8\n140\n59\n94.5\n    Noah\n661\n406\n61.4\n151\n63\n103.0\n    Ramb...\n118\n0\n0.0\n93\n43\n75.8\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Wingspan Stats",
     "section": "",
-    "text": "Some summary data for all recorded games of Wingspan in my score sheet. Only players with &gt;= 10 games recorded are included in these summaries.\nData\nLeaderboard\nTips:\n\nDrag on plots to zoom in\nDouble-tap plots to reset\nDashboard data refreshes daily at 7am Eastern or when I make a change\n\n\n\n\n\n\n\n\n\n\nLast updated\nOct. 10, '26, 12:09\n\n\n\n\n\n\n\n\n\n\n Back to top"
+    "text": "Some summary data for all recorded games of Wingspan in my score sheet. Only players with &gt;= 10 games recorded are included in these summaries.\nData\nLeaderboard\nTips:\n\nDrag on plots to zoom in\nDouble-tap plots to reset\nDashboard data refreshes daily at 7am Eastern or when I make a change\n\n\n\n\n\n\n\n\n\n\nLast updated\nOct. 11, '26, 12:36\n\n\n\n\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "leaderboard.html",
