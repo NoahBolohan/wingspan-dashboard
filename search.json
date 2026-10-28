@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "data.html",
-    "href": "data.html",
-    "title": "Data",
-    "section": "",
-    "text": "Summary statistics\n    \n    \n      Min. 10 games played\n    \n    \n      \n      N\n      Won\n      %\n      Max\n      Min\n      Mean\n    \n  \n  \n    Alex\n257\n123\n47.9\n178\n67\n104.3\n    Joey\n44\n18\n40.9\n116\n77\n96.3\n    Meadow\n124\n0\n0.0\n90\n46\n75.0\n    Mila\n385\n130\n33.8\n140\n59\n94.5\n    Noah\n668\n410\n61.4\n151\n63\n103.1\n    Ramb...\n125\n0\n0.0\n93\n43\n76.0\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Wingspan Stats",
     "section": "",
-    "text": "Some summary data for all recorded games of Wingspan in my score sheet. Only players with &gt;= 10 games recorded are included in these summaries.\nData\nLeaderboard\nTips:\n\nDrag on plots to zoom in\nDouble-tap plots to reset\nDashboard data refreshes daily at 7am Eastern or when I make a change\n\n\n\n\n\n\n\n\n\n\nLast updated\nOct. 27, '26, 12:16\n\n\n\n\n\n\n\n\n\n\n Back to top"
+    "text": "Some summary data for all recorded games of Wingspan in my score sheet. Only players with &gt;= 10 games recorded are included in these summaries.\nData\nLeaderboard\nTips:\n\nDrag on plots to zoom in\nDouble-tap plots to reset\nDashboard data refreshes daily at 7am Eastern or when I make a change\n\n\n\n\n\n\n\n\n\n\nLast updated\nOct. 28, '26, 13:02\n\n\n\n\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "leaderboard.html",
@@ -19,5 +12,12 @@
     "title": "Records & Leaderboard",
     "section": "",
     "text": "Records\n    \n    \n    \n      Name\n      \n      \n      \n      Total\n    \n  \n  \n    Alex\n3\n4\n3\n10\n    Joey\n0\n0\n0\n0\n    Meadow\n0\n0\n0\n0\n    Mila\n1\n1\n2\n4\n    Noah\n6\n5\n5\n16\n    Rambouillet\n0\n0\n0\n0\n  \n  \n\n\n\n\n\n\n\n\n\n  \n    \n      Leaderboard\n    \n    \n    \n      \n      \n      Name\n      Value\n      Date\n    \n  \n  \n    Highest Score\nTrophy\nAlex\n178\n02/27/2025\n    Trophy\nAlex\n173\n07/11/2026\n    Trophy\nAlex\n169\n07/13/2025\n    Most Bird Points\nTrophy\nNoah\n74\n10/12/2026\n    Trophy\nNoah\n72\n06/21/2026\n    Trophy\nAlex\n69\n04/13/2026\n    Most Bonus Card Points\nTrophy\nAlex\n50\n07/13/2025\n    Trophy\nAlex\n38\n04/06/2026\n    Trophy\nMila\n36\n10/17/2025\n    Most End-of-round Points\nTrophy\nMila\n22\n12/22/2024\n    Trophy\nMila\n22\n12/26/2024\n    Trophy\nMila\n22\n01/08/2025\n    Most Eggs Laid\nTrophy\nNoah\n44\n08/17/2026\n    Trophy\nNoah\n43\n02/16/2025\n    Trophy\nNoah\n38\n01/22/2025\n    Most Cached Food\nTrophy\nNoah\n38\n06/26/2025\n    Trophy\nNoah\n35\n01/06/2025\n    Trophy\nNoah\n35\n06/21/2026\n    Most Tucked Cards\nTrophy\nAlex\n98\n02/25/2025\n    Trophy\nNoah\n97\n05/28/2025\n    Trophy\nNoah\n90\n01/12/2025\n    Most Nectar Points\nTrophy\nNoah\n15\n12/28/2024\n    Trophy\nNoah\n15\n01/01/2025\n    Trophy\nNoah\n15\n01/06/2025\n    Most Duet Tokens\nTrophy\nNoah\n13\n08/03/2025\n    Trophy\nAlex\n12\n01/11/2026\n    Trophy\nNoah\n11\n11/16/2025\n    Hummingbird Track\nTrophy\nNoah\n17\n06/29/2026\n    Trophy\nAlex\n16\n07/11/2026\n    Trophy\nAlex\n15\n06/29/2026\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "Data",
+    "section": "",
+    "text": "Summary statistics\n    \n    \n      Min. 10 games played\n    \n    \n      \n      N\n      Won\n      %\n      Max\n      Min\n      Mean\n    \n  \n  \n    Alex\n257\n123\n47.9\n178\n67\n104.3\n    Joey\n44\n18\n40.9\n116\n77\n96.3\n    Meadow\n124\n0\n0.0\n90\n46\n75.0\n    Mila\n385\n130\n33.8\n140\n59\n94.5\n    Noah\n668\n410\n61.4\n151\n63\n103.1\n    Ramb...\n125\n0\n0.0\n93\n43\n76.0\n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
   }
 ]
